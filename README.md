@@ -9,6 +9,6 @@ Current Implementation:
 
 Future Implementation:
 - Leaderboard
-- Main menu to choose your name, snake color...
+- Main menu to choose your name, snake color, access leaderboard, start the game...
 - Adding graphics (background image, snake, apple...)
 - Adding difficulty based on score (bad apple, increase speed, obstacles...)
