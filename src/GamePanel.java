@@ -47,11 +47,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void draw(Graphics g) {
         if(running) {
-            // Drawing a grid to make it easier to see (TEMPORARY)
+            /* Drawing a grid to make it easier to see (TEMPORARY)
             for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
             }
+            */
 
             // Draw the apple
             g.setColor(Color.RED);
@@ -64,6 +65,9 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
                     g.setColor(new Color(45, 180, 0));
+                    /* Random color snake???
+                    g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+                    */
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
