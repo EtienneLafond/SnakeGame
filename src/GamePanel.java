@@ -19,10 +19,10 @@ public class GamePanel extends JPanel implements ActionListener {
     int applesEaten;
     int appleX; // xCoord of the apple
     int appleY; // yCoord of the apple
-    int badApplesEaten;
-    int badAppleX; // xCoord of the apple
-    int badAppleY; // yCoord of the apple
-    boolean hasBadApple = false;
+    int poison;
+    int poisonX; // xCoord of the apple
+    int poisonY; // yCoord of the apple
+    boolean hasPoison = false;
     char direction = 'R'; // Snake initially goes right
     boolean running = false;
     Timer timer;
@@ -78,9 +78,9 @@ public class GamePanel extends JPanel implements ActionListener {
             g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
 
             // Draw bad apple
-            if(hasBadApple) {
+            if(hasPoison) {
                 g.setColor(Color.blue);
-                g.fillOval(badAppleX, badAppleY, UNIT_SIZE, UNIT_SIZE);
+                g.fillOval(poisonX, poisonY, UNIT_SIZE, UNIT_SIZE);
             }
 
             // Draw the snake
@@ -107,8 +107,8 @@ public class GamePanel extends JPanel implements ActionListener {
             g.setColor(Color.blue);
             g.setFont(new Font("Ink Free", Font.BOLD, 40));
             FontMetrics metrics2 = getFontMetrics(g.getFont());
-            g.drawString("Poison: "+badApplesEaten,
-                    (SCREEN_WIDTH - metrics2.stringWidth("Poison: "+badApplesEaten))/4*3, g.getFont().getSize());
+            g.drawString("Poison: "+ poison,
+                    (SCREEN_WIDTH - metrics2.stringWidth("Poison: "+ poison))/4*3, g.getFont().getSize());
         } else {
             gameOver(g);
         }
@@ -126,8 +126,8 @@ public class GamePanel extends JPanel implements ActionListener {
      * Creates a new bad apple at random coordinates on the game panel
      */
     public void newBadApple() {
-        badAppleX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
-        badAppleY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
+        poisonX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
+        poisonY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
     }
 
     /**
@@ -168,7 +168,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
             // Add a new bad apple every 5 good apples eaten
             if(applesEaten > 0 && applesEaten%5 == 0) {
-                hasBadApple = true;
+                hasPoison = true;
                 newBadApple();
             }
         }
@@ -178,9 +178,9 @@ public class GamePanel extends JPanel implements ActionListener {
      * Check if the snake eats (go over/hit) a bad apple and increments the number of bad apples eaten
      */
     public void checkBadApple() {
-        if(x[0] == badAppleX && y[0] == badAppleY) {
-            badApplesEaten++;
-            hasBadApple = false;
+        if(x[0] == poisonX && y[0] == poisonY) {
+            poison++;
+            hasPoison = false;
         }
     }
 
@@ -212,7 +212,7 @@ public class GamePanel extends JPanel implements ActionListener {
             running = false;
         }
         // Check if the snake accumulated too many poison
-        if(badApplesEaten >= 3) {
+        if(poison >= 3) {
             running = false;
         }
 
@@ -237,8 +237,8 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setColor(Color.blue);
         g.setFont(new Font("Ink Free", Font.BOLD, 40));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
-        g.drawString("Poison: "+badApplesEaten,
-                (SCREEN_WIDTH - metrics2.stringWidth("Poison: "+badApplesEaten))/4*3, g.getFont().getSize());
+        g.drawString("Poison: "+ poison,
+                (SCREEN_WIDTH - metrics2.stringWidth("Poison: "+ poison))/4*3, g.getFont().getSize());
 
         // Game Over text
         g.setColor(Color.red);
