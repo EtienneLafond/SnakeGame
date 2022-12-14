@@ -21,7 +21,8 @@ public class GamePanel extends JPanel implements ActionListener {
     int appleY; // yCoord of the apple
     int badApplesEaten;
     int badAppleX; // xCoord of the apple
-    int badAappleY; // yCoord of the apple
+    int badAppleY; // yCoord of the apple
+    boolean hasBadApple = false;
     char direction = 'R'; // Snake initially goes right
     boolean running = false;
     Timer timer;
@@ -76,6 +77,12 @@ public class GamePanel extends JPanel implements ActionListener {
             g.setColor(Color.RED);
             g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
 
+            // Draw bad apple
+            if(hasBadApple) {
+                g.setColor(Color.blue);
+                g.fillOval(badAppleX, badAppleY, UNIT_SIZE, UNIT_SIZE);
+            }
+
             // Draw the snake
             for (int i = 0; i < bodyParts; i++) {
                 if (i == 0) {
@@ -109,6 +116,14 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     /**
+     * Creates a new bad apple at random coordinates on the game panel
+     */
+    public void newBadApple() {
+        badAppleX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
+        badAppleY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
+    }
+
+    /**
      * Moves the snake's head by 1 UNIT_SIZE and shift its body
      */
     public void move() {
@@ -135,13 +150,30 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Check if the snake eats (go over/hit) an apple, increments his body parts and number of apple eaten (Score)
+     * Check if the snake eats (go over/hit) an apple, increments his body parts and number of apple eaten (Score).
+     * Add a bad apple to the game every 5 good apples
      */
     public void checkApple() {
         if(x[0] == appleX && y[0] == appleY) {
             bodyParts++;
             applesEaten++;
             newApple();
+
+            // Add a new bad apple every 5 good apples eaten
+            if(applesEaten > 0 && applesEaten%5 == 0) {
+                hasBadApple = true;
+                newBadApple();
+            }
+        }
+    }
+
+    /**
+     * Check if the snake eats (go over/hit) a bad apple and increments the number of bad apples eaten
+     */
+    public void checkBadApple() {
+        if(x[0] == badAppleX && y[0] == badAppleY) {
+            badApplesEaten++;
+            hasBadApple = false;
         }
     }
 
@@ -205,6 +237,7 @@ public class GamePanel extends JPanel implements ActionListener {
         if(running) {
             move();
             checkApple();
+            checkBadApple();
             checkCollision();
         }
         repaint();
